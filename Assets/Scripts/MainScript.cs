@@ -1,62 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainScript : MonoBehaviour
 {
 
-    int max;
-    int min;
+    [SerializeField] int max;
+    [SerializeField] int min;
+    [SerializeField] TextMeshProUGUI guessText;
     int guess;
+    public Button highButton;
+    public Button lowButton;
     // Start is called before the first frame update
     void Start()
     {
+        
         StartGame();
     }
 
     // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (min == max)
         {
-            
-            min = guess;
-            NextGuess();   
+            highButton.enabled = false;
+            lowButton.enabled = false;
         }
-
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (max > 1000)
         {
-            max = guess;
-            NextGuess();
-        }
+            highButton.enabled = false;
+            lowButton.enabled = false;
 
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            Debug.Log("I am a Master Mind");
-            StartGame();
         }
     }
 
-
     void StartGame()
     {
-        max = 1000;
-        min = 1;
-        guess = 500;
+        NextGuess();
+    }
 
-        Debug.Log("Welcome to Number Wizard");
-        Debug.Log("Pick a number, don't tell me what it is...");
-        Debug.Log("The highest number you can pick is " + max);
-        Debug.Log("The lowest number you can pick is " + min);
-        Debug.Log("Tell me if your number is higher or lower than " + guess);
-        Debug.Log("Push up = higher, Push down = lower, Push Enter = Correct");
+    public void OnPressHigher()
+    {
+        min = guess + 1;
+        NextGuess();
+    }
 
-        max++;
+    public void OnPressLower()
+    {
+        max = guess - 1;
+        NextGuess();
     }
 
     void NextGuess()
     {
-        guess = (max + min) / 2;
-        Debug.Log("Is it higher or lower than... " + guess);
+        guess = Random.Range(min, max + 1);
+        guessText.text = guess.ToString();
+        
     }
 }
